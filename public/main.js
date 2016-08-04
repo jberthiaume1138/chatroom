@@ -1,4 +1,5 @@
-$(document).ready(function() {
+$(document).ready(function() {                  // this is all client side
+    var socket = io();  // Manager object
     var input = $('input');
     var messages = $('#messages');
 
@@ -13,6 +14,9 @@ $(document).ready(function() {
 
         var message = input.val();
         addMessage(message);
+        socket.emit('thing', message);    // sends to the Socket.IO server
         input.val('');
     });
+
+    socket.on('message', addMessage);
 });
