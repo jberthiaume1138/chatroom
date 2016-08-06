@@ -24,7 +24,7 @@ $(document).ready(function() {                  // this is all client side
 
     var users = $('#users');
     var updateUserCount = function (connections) {
-        users.append('<div>' + connections + ' users currently online.</div>');
+        users.append('<p>' + connections + ' users currently online.</p>');
     };
 
     socket.on('connection', updateUserCount);

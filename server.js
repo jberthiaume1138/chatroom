@@ -13,13 +13,13 @@ var connections = 0;    // counter for number of connected clients
 io.on('connection', function (socket) {     //listens for new clients to connect
     connections++;
     console.log('A user connected.');
-    console.log('Current connections: ' + connections);
+    console.log('There are currently ' + connections + ' users online.');
     socket.broadcast.emit('connection', connections);
 
     socket.on('disconnect', function() {
       connections--;
-      console.log('A user has disconnected.');
-      console.log('Current connections: ' + connections);
+      console.log('A user has gone offline.');
+      console.log('There are currently ' + connections + ' users online.');
       socket.broadcast.emit('connection', connections);
     });
 
