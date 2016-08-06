@@ -8,8 +8,12 @@ app.use(express.static('public'));
 var server = http.Server(app);  //wraps Express app in a Node.js HTTP server object - allows Socket.IO to run alongside
 var io = socket_io(server);     //initialize Socket.IO Server, which is an EventEmitter
 
+var connections = 0;    // counter for number of connected clients
+
 io.on('connection', function (socket) {     //listens for new clients to connect
+    connections++;
     console.log('Client connected');
+    console.log('Current connections: ' + connections);
 
     socket.on('thing', function(message) {    //listens for a message called "thing"
         console.log('Received message:', message);

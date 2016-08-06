@@ -19,4 +19,12 @@ $(document).ready(function() {                  // this is all client side
     });
 
     socket.on('message', addMessage);
+
+    var users = $('#users');
+    var updateUserCount = function (connections) {
+        users.append('<p>' + connections + ' users currently online.</p>');
+    };
+
+    socket.on('connection', updateUserCount);
+
 });
