@@ -14,17 +14,21 @@ $(document).ready(function() {                  // this is all client side
 
         var message = input.val();
         addMessage(message);
-        socket.emit('thing', message);    // sends to the Socket.IO server
+        socket.emit('chat', message);    // sends to the Socket.IO server
         input.val('');
     });
 
     socket.on('message', addMessage);
 
+
+
     var users = $('#users');
     var updateUserCount = function (connections) {
-        users.append('<p>' + connections + ' users currently online.</p>');
+        users.append('<div>' + connections + ' users currently online.</div>');
     };
 
     socket.on('connection', updateUserCount);
+
+    socket.on('disconnect', updateUserCount);
 
 });

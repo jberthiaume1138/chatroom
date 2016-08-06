@@ -12,13 +12,23 @@ var connections = 0;    // counter for number of connected clients
 
 io.on('connection', function (socket) {     //listens for new clients to connect
     connections++;
-    console.log('Client connected');
+    console.log('A user connected.');
     console.log('Current connections: ' + connections);
+    socket.broadcast.emit('connection', connections);
 
-    socket.on('thing', function(message) {    //listens for a message called "thing"
+    socket.on('disconnect', function() {
+      connections--;
+      console.log('A user has disconnected.');
+      console.log('Current connections: ' + connections);
+      socket.broadcast.emit('connection', connections);
+    });
+
+    socket.on('chat', function(message) {    //listens for a message called "thing"
         console.log('Received message:', message);
         socket.broadcast.emit('message', message);      //sends to all clients except the one whose socket we're using
     });
+
+
 });
 
-server.listen(8080);       // rather than app.listen, as app is wrapped by Server for Socket.IO
+server.listen(8080);       // rather than app.listen, as app is wrapped by server for Socket.IO
