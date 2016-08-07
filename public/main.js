@@ -27,5 +27,4 @@ $(document).ready(function() {                  // this is all client side
     socket.on('connection', updateUserCount);
 
     socket.on('disconnect', updateUserCount);
-
 });
