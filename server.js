@@ -10,13 +10,13 @@ var io = socket_io(server);     //initialize Socket.IO Server, which is an Event
 
 var connections = 0;    // counter for number of connected clients
 
-io.on('connection', function (socket) {     //listens for new clients to connect
+io.on('connection', function (socket) {     //listens for new clients to connect    
     connections++;
     console.log('A user connected.');
     console.log('There are currently ' + connections + ' users online.');
     socket.broadcast.emit('connection', connections);
 
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function() {    //listens for disconnects
       connections--;
       console.log('A user has gone offline.');
       console.log('There are currently ' + connections + ' users online.');
@@ -27,8 +27,6 @@ io.on('connection', function (socket) {     //listens for new clients to connect
         console.log('Received message:', message);
         socket.broadcast.emit('message', message);      //sends to all clients except the one whose socket we're using
     });
-
-
 });
 
 server.listen(8080);       // rather than app.listen, as app is wrapped by server for Socket.IO

@@ -11,7 +11,6 @@ $(document).ready(function() {                  // this is all client side
         if (event.keyCode != 13) {
             return;
         }
-
         var message = input.val();
         addMessage(message);
         socket.emit('chat', message);    // sends to the Socket.IO server
@@ -20,11 +19,9 @@ $(document).ready(function() {                  // this is all client side
 
     socket.on('message', addMessage);
 
-
-
-    var users = $('#users');
     var updateUserCount = function (connections) {
-        users.append('<p>' + connections + ' users currently online.</p>');
+        $('#users').empty();
+        $('#users').append('<p>' + connections + ' users currently online.</p>');
     };
 
     socket.on('connection', updateUserCount);
