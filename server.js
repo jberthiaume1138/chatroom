@@ -12,18 +12,17 @@ var connections = 0;    // counter for number of connected clients
 
 io.on('connection', function (socket) {     //listens for new clients to connect
     connections++;
+    io.emit('user connected', connections);     //sends to everyone
+
     console.log('A user connected.');
     console.log('There are currently ' + connections + ' users online.');
-    socket.broadcast.emit('connection', connections);    // sends total connections to everyone BUT the current socket
-    // this.emit('connection', connections);    // loops forever, then bombs
 
-    socket.emit('connection', connections);     //sends connection even to each socket -- needed for first user
-
-    socket.on('disconnect', function() {
+    socket.on('disconnect', function() {    //listens for disconnects
         connections--;
+        io.emit('user disconnected', connections);      //sends to everyone
+
         console.log('A user has gone offline.');
         console.log('There are currently ' + connections + ' users online.');
-        socket.broadcast.emit('connection', connections);
     });
 
     socket.on('chat', function(message) {    //listens for a message called "chat"
@@ -32,6 +31,5 @@ io.on('connection', function (socket) {     //listens for new clients to connect
     });
 });
 
-// io.emit('connection', connections);      // this crashes the server.......
 
 server.listen(8080);       // rather than app.listen, as app is wrapped by server for Socket.IO

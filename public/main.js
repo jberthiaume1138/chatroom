@@ -20,11 +20,11 @@ $(document).ready(function() {                  // this is all client side
     socket.on('message', addMessage);
 
     var updateUserCount = function (connections) {
+        console.log('user state change');
         $('#users').empty();
         $('#users').append('<p>' + connections + ' users currently online.</p>');
     };
 
-    socket.on('connection', updateUserCount);
-
-    socket.on('disconnect', updateUserCount);
+    socket.on('user connected', updateUserCount);
+    socket.on('user disconnected', updateUserCount);
 });
