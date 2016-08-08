@@ -1,4 +1,27 @@
+#input {
+    width: 30em;
+}
+
+#messages {
+    background-color: #B3C1FF;
+    margin-bottom: 1em;
+}
+
 #users {
     background-color: #D3D3D3;
-    border-top: black 1px solid;
+    padding: 0.5em;
+    border: 1px solid black;
+    margin: 0;
+}
+
+#notify {
+    background-color: #FFBFBF;
+    margin-bottom: 1em;
+}
+
+.userheader {
+    color: #7A7A7A;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 1em;
 }

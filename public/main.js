@@ -4,16 +4,16 @@ $(document).ready(function() {                  // this is all client side
     var messages = $('#messages');
 
     var addMessage = function(message) {
-        messages.append('<div>' + message + '</div>');
+        messages.append('<p><span class="userheader">' + socket.id + ' says: </span>' + message + '</p>');
     };
 
     input.on('keydown', function(event) {
         if (event.keyCode != 13) {
             setTimeout(function() {
-                socket.emit('typing')
-            }, 2000);
+                socket.emit('typing');
+            }, 3000);
         }
-        else {
+        else {      // enter key - submit a message up to the server
             var message = input.val();
             addMessage(message);
             socket.emit('chat', message);    // sends to the Socket.IO server
@@ -31,7 +31,7 @@ $(document).ready(function() {                  // this is all client side
 
     var showUserTyping = function() {
         $('#notify').empty();
-        $('#notify').append('A user is typing');
+        $('#notify').append('User ID: ' + socket.id + ' is typing');
     };
 
     socket.on('user connected', updateUserCount);

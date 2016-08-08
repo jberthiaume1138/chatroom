@@ -14,7 +14,7 @@ io.on('connection', function (socket) {     //listens for new clients to connect
     connections++;
     io.emit('user connected', connections);     //sends to everyone
 
-    console.log('A user connected.');
+    console.log('A user connected. Hello ' + socket.id);
     console.log('There are currently ' + connections + ' users online.');
 
     socket.on('disconnect', function() {    //listens for disconnects
@@ -26,13 +26,13 @@ io.on('connection', function (socket) {     //listens for new clients to connect
     });
 
     socket.on('chat', function(message) {    //listens for a message called "chat"
-        console.log('Received message:', message);
+        console.log('Received message from:' + socket.id,  message);
         socket.broadcast.emit('message', message);      //sends to all clients except the one whose socket we're using
     });
 
     socket.on('typing', function(){
-        io.emit('typing');
-    })
+        socket.broadcast.emit('typing');    // add user id eventually
+    });
 });
 
 
