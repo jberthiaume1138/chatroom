@@ -1,23 +1,34 @@
 $(document).ready(function() {                  // this is all client side
     var socket = io();  // Manager object
-    var input = $('input');
-    var messages = $('#messages');
+
+    var $input = $('#input');
+    var $messages = $('#messages');
+    var $nickname = $('#nickname');
+
+    var message = {};
+
+    $('#btnNickname').on('click', function() {
+        var nickname = $nickname.val();
+        socket.emit('store nickname', nickname);
+    });
 
     var addMessage = function(message) {
-        messages.append('<p><span class="userheader">' + socket.id + ' says: </span>' + message + '</p>');
+        $messages.append('<p><span class="userheader">' + message.nickname + ' says: </span>' + message.text + '</p>');
     };
 
-    input.on('keydown', function(event) {
+    $input.on('keydown', function(event) {
         if (event.keyCode != 13) {
             setTimeout(function() {
                 socket.emit('typing');
             }, 3000);
         }
-        else {      // enter key - submit a message up to the server
-            var message = input.val();
+        else {      // enter key pressed - send the message up to the server
+            message.nickname = $('#nickname').val();
+            message.text = $input.val();
             addMessage(message);
+            console.log(message);
             socket.emit('chat', message);    // sends to the Socket.IO server
-            input.val('');
+            $input.val('');
         }
     });
 
@@ -26,12 +37,17 @@ $(document).ready(function() {                  // this is all client side
     var updateUserCount = function (connections) {
         console.log('user state change');
         $('#users').empty();
-        $('#users').append('<p>' + connections + ' users currently online.</p>');
+        if (connections === 1) {
+            $('#users').append('<p>' + connections + ' user currently online.</p>');
+        }
+        else {
+            $('#users').append('<p>' + connections + ' users currently online.</p>');
+        }
     };
 
-    var showUserTyping = function() {
+    var showUserTyping = function(nickname) {
         $('#notify').empty();
-        $('#notify').append('User ID: ' + socket.id + ' is typing');
+        $('#notify').append('User ID: ' + nickname + ' is typing');
     };
 
     socket.on('user connected', updateUserCount);

@@ -10,12 +10,20 @@ var io = socket_io(server);     //initialize Socket.IO Server, which is an Event
 
 var connections = 0;    // counter for number of connected clients
 
+var users = [];
+
 io.on('connection', function (socket) {     //listens for new clients to connect
     connections++;
     io.emit('user connected', connections);     //sends to everyone
 
+
     console.log('A user connected. Hello ' + socket.id);
     console.log('There are currently ' + connections + ' users online.');
+
+    socket.on('store nickname', function(nickname) {
+        users[socket.id] = nickname;
+        console.log(users);
+    });
 
     socket.on('disconnect', function() {    //listens for disconnects
         connections--;
@@ -26,12 +34,13 @@ io.on('connection', function (socket) {     //listens for new clients to connect
     });
 
     socket.on('chat', function(message) {    //listens for a message called "chat"
-        console.log('Received message from:' + socket.id,  message);
+        console.log('Received message from:' + users[socket.id], message.nickname,  message.text);
         socket.broadcast.emit('message', message);      //sends to all clients except the one whose socket we're using
     });
 
     socket.on('typing', function(){
-        socket.broadcast.emit('typing');    // add user id eventually
+        socket.broadcast.emit('typing', users[socket.id]);    // add user id eventually
+
     });
 });
 
