@@ -29,6 +29,10 @@ io.on('connection', function (socket) {     //listens for new clients to connect
         console.log('Received message:', message);
         socket.broadcast.emit('message', message);      //sends to all clients except the one whose socket we're using
     });
+
+    socket.on('typing', function(){
+        io.emit('typing');
+    })
 });
 
 

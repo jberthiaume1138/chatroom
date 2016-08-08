@@ -9,12 +9,16 @@ $(document).ready(function() {                  // this is all client side
 
     input.on('keydown', function(event) {
         if (event.keyCode != 13) {
-            return;
+            setTimeout(function() {
+                socket.emit('typing')
+            }, 2000);
         }
-        var message = input.val();
-        addMessage(message);
-        socket.emit('chat', message);    // sends to the Socket.IO server
-        input.val('');
+        else {
+            var message = input.val();
+            addMessage(message);
+            socket.emit('chat', message);    // sends to the Socket.IO server
+            input.val('');
+        }
     });
 
     socket.on('message', addMessage);
@@ -25,6 +29,12 @@ $(document).ready(function() {                  // this is all client side
         $('#users').append('<p>' + connections + ' users currently online.</p>');
     };
 
+    var showUserTyping = function() {
+        $('#notify').empty();
+        $('#notify').append('A user is typing');
+    };
+
     socket.on('user connected', updateUserCount);
     socket.on('user disconnected', updateUserCount);
+    socket.on('typing', showUserTyping);
 });
