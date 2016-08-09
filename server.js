@@ -12,37 +12,37 @@ var connections = 0;    // counter for number of connected clients
 
 var users = [];
 
-io.on('connection', function (socket) {     //listens for new clients to connect
+io.on('connection', function (socket) {
     connections++;
     io.emit('user connected', connections);     //sends to everyone
 
-
-    console.log('A user connected. Hello ' + socket.id);
-    console.log('There are currently ' + connections + ' users online.');
+    // console.log('A user connected. Hello ' + socket.id);
+    // console.log('There are currently ' + connections + ' users online.');
 
     socket.on('store nickname', function(nickname) {
         users[socket.id] = nickname;
-        console.log(users);
     });
 
-    socket.on('disconnect', function() {    //listens for disconnects
+    socket.on('disconnect', function() {
         connections--;
         io.emit('user disconnected', connections);      //sends to everyone
 
-        console.log('A user has gone offline.');
-        console.log('There are currently ' + connections + ' users online.');
+        // console.log('A user has gone offline.');
+        // console.log('There are currently ' + connections + ' users online.');
     });
 
-    socket.on('chat', function(message) {    //listens for a message called "chat"
-        console.log('Received message from:' + users[socket.id], message.nickname,  message.text);
+    socket.on('chat', function(message) {
+        // console.log('Received message from:' + users[socket.id], message.nickname,  message.text);
         socket.broadcast.emit('message', message);      //sends to all clients except the one whose socket we're using
     });
 
-    socket.on('typing', function(){
-        socket.broadcast.emit('typing', users[socket.id]);    // add user id eventually
+    socket.on('typing', function() {
+        socket.broadcast.emit('typing', users[socket.id]);
+    });
 
+    socket.on('stop typing', function() {
+        socket.broadcast.emit('stop typing', users[socket.id]);
     });
 });
-
 
 server.listen(8080);       // rather than app.listen, as app is wrapped by server for Socket.IO
