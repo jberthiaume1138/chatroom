@@ -1,5 +1,5 @@
 #input {
-    width: 30em;
+    width: 40em;
 }
 
 #messages {
@@ -24,4 +24,18 @@
     font-weight: bold;
     font-style: italic;
     font-size: 1em;
+}
+
+p {
+    margin:0.3em;
+    padding: 0;
+    border: 0;
+}
+
+#login {
+    display: block;
+}
+
+#chatroom {
+    display: none;
 }

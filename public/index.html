@@ -12,15 +12,23 @@
 
 <body>
     <h1>Welcome to the chat room</h1>
-    <div>
-        <label>Enter your nickname<input id="nickname" type="text"></label>
+
+    <div id="login">
+        <h2>You must enter a nickname to enter the chatroom</h2>
+        <label>Nickname:<input id="nickname" type="text"></label>
         <button id="btnNickname">Store Nickname</button>
     </div>
 
-    <input id="input" type="text">
-    <div id="messages"></div>
-    <div id="notify"></div>
-    <div id="users"></div>
+    <div id="chatroom">
+        <input id="input" type="text">
+        <div id="messages"></div>
+        <div id="notify"></div>
+        <div id="users">
+            <div id="user-count"></div>
+            <div id="user-list"></div>
+            <div id="status"></div>
+        </div>
+    </div>
 
 </body
 </html>

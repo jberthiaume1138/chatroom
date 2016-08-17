@@ -13,19 +13,25 @@ var connections = 0;    // counter for number of connected clients
 var users = [];
 
 io.on('connection', function (socket) {
-    connections++;
-    io.emit('user connected', connections);     //sends to everyone
+
+    // io.emit('user connected', connections);     //sends to everyone
 
     // console.log('A user connected. Hello ' + socket.id);
     // console.log('There are currently ' + connections + ' users online.');
 
     socket.on('store nickname', function(nickname) {
+        connections++;
         users[socket.id] = nickname;
+        console.log(users);
+        io.emit('user joined', connections, nickname);
     });
 
     socket.on('disconnect', function() {
         connections--;
-        io.emit('user disconnected', connections);      //sends to everyone
+        var departed = users[socket.id];
+        console.log(departed + ' ' + socket.id + ' has left the room.');
+        io.emit('user disconnected', connections, departed);      //sends to everyone
+
 
         // console.log('A user has gone offline.');
         // console.log('There are currently ' + connections + ' users online.');
