@@ -41,17 +41,11 @@ $(document).ready(function() {
 
     socket.on('message', addMessage);
 
-    var updateJoined = function (connections, userList) {
-        console.log(userList);
-        var id = socket.id;
-        console.log(id.toString());
-        console.log(userList[id]);
+    var updateJoined = function (connections, nickname, userList) {
+        console.log('New user, total now is: ' + Object.keys(userList).length);
 
-
-        // console.log(nickname + ' has joined the channel.');
-        $status.append('<p>' + userList[socket.id] + ' has joined the channel.</p>');
-
-        // $userList.append('<p id="' + nickname + '">' + nickname + '</p>');
+        console.log(nickname + ' has joined the channel.');
+        $status.append('<p>' + nickname + ' has joined the channel.</p>');
 
         $userCount.empty();
         if (connections === 1) {
@@ -64,9 +58,11 @@ $(document).ready(function() {
         updateUserList(userList);
     };
 
-    var updateDisconnected = function (connections, userList) {
-        // console.log(departed + ' has left the room.');
-        $status.append('<p>' + userList[socket.id] + ' has left the room.</p>');
+    var updateDisconnected = function (connections, departed, userList) {
+        console.log('Someone left, now there are: ' + Object.keys(userList).length);
+
+        console.log(departed + ' has left the room.');
+        $status.append('<p>' + departed + ' has left the room.</p>');
 
         // $('#' + departed).remove();
 
@@ -82,6 +78,8 @@ $(document).ready(function() {
     };
 
     var updateUserList = function(userList) {
+        // clears and repopulates the list of online users
+        console.log(userList);
         $userList.empty();
         for(var userID in userList) {
             console.log(userList[userID]);

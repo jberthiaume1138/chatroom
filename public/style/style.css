@@ -19,12 +19,12 @@
     margin-bottom: 1em;
 }
 
-.userheader {
+/*.userheader {
     color: #7A7A7A;
     font-weight: bold;
     font-style: italic;
     font-size: 1em;
-}
+}*/
 
 p {
     margin:0.3em;
@@ -38,4 +38,8 @@ p {
 
 #chatroom {
     display: none;
+}
+
+#user-list-header {
+    background-color: #C390D4;
 }

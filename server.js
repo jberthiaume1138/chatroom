@@ -14,25 +14,26 @@ var userList = {};
 
 io.on('connection', function (socket) {
 
-    var clients = io.sockets.sockets;
-    for(var client in clients) {
-        console.log(client);
-    }
+    // var clients = io.sockets.sockets;
+    // for(var client in clients) {
+    //     console.log(client);
+    // }
 
     socket.on('store nickname', function(nickname) {
         connections++;
-        // var id = socket.id;
-        // userList[id.toString()] = nickname;
         userList[socket.id] = nickname;
         console.log(userList);
 
-        io.emit('user joined', connections, userList);
+        io.emit('user joined', connections, nickname, userList);
     });
 
     socket.on('disconnect', function() {
         connections--;
         var departed = userList[socket.id];
-        io.emit('user disconnected', connections, userList);
+        console.log(departed);
+        delete userList[socket.id];
+        io.emit('user disconnected', connections, departed, userList);
+        console.log('Someone left ' + socket.id);
     });
 
     socket.on('chat', function(message) {
