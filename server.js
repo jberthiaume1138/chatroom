@@ -8,27 +8,19 @@ app.use(express.static('public'));
 var server = http.Server(app);
 var io = socket_io(server);
 
-var connections = 0;    // counter for number of connected clients
-
 var userList = {};
 
 io.on('connection', function (socket) {
 
     socket.on('store nickname', function(nickname) {
-        connections++;
         userList[socket.id] = nickname;
-        console.log(userList);
-
-        io.emit('user joined', connections, nickname, userList);
+        io.emit('user joined', nickname, userList);
     });
 
     socket.on('disconnect', function() {
-        connections--;
         var departed = userList[socket.id];
-        console.log(departed);
         delete userList[socket.id];
-        io.emit('user disconnected', connections, departed, userList);
-        console.log('Someone left ' + socket.id);
+        io.emit('user disconnected', departed, userList);
     });
 
     socket.on('chat', function(message) {

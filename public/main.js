@@ -41,7 +41,7 @@ $(document).ready(function() {
 
     socket.on('message', addMessage);
 
-    var updateJoined = function (connections, nickname, userList) {
+    var updateJoined = function (nickname, userList) {
 
         $status.append('<p>' + nickname + ' has joined the channel.</p>');
 
@@ -56,7 +56,7 @@ $(document).ready(function() {
         updateUserList(userList);
     };
 
-    var updateDisconnected = function (connections, departed, userList) {
+    var updateDisconnected = function (departed, userList) {
 
         $status.append('<p>' + departed + ' has left the room.</p>');
 
@@ -73,16 +73,13 @@ $(document).ready(function() {
 
     var updateUserList = function(userList) {
         // clears and repopulates the list of online users
-        console.log(userList);
         $userList.empty();
         for(var userID in userList) {
-            console.log(userList[userID]);
             $userList.append('<p id="' + userID + '">' + userList[userID] + '</p>');
         }
     };
 
     var showUserTyping = function(nickname) {
-        console.log(nickname + 'is typing');
         $notify.empty();
         $notify.append(nickname + ' is typing');
     };
