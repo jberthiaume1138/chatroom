@@ -1,5 +1,5 @@
-$(document).ready(function() {                  // this is all client side
-    var socket = io();  // Manager object
+$(document).ready(function() {
+    var socket = io();
 
     var $login = $('#login');
     var $chatroom = $('#chatroom');
@@ -7,7 +7,6 @@ $(document).ready(function() {                  // this is all client side
     var $messages = $('#messages');
     var $nickname = $('#nickname');
     var $notify = $('#notify');
-    // var $users = $('#users');
     var $userCount = $('#user-count');
     var $userList = $('#user-list');
     var $status = $('#status');
@@ -30,23 +29,29 @@ $(document).ready(function() {                  // this is all client side
         if (event.keyCode != 13) {
             socket.emit('typing');
         }
-        else {      // enter key pressed - send the message up to the server
+        else {
             socket.emit('stop typing');
             message.nickname = $nickname.val();
             message.text = $input.val();
             addMessage(message);
-            socket.emit('chat', message);    // sends to the Socket.IO server
+            socket.emit('chat', message);
             $input.val('');
         }
     });
 
     socket.on('message', addMessage);
 
-    var updateJoined = function (connections, nickname) {
-        console.log(nickname + ' has joined the channel.');
-        $status.append('<p>' + nickname + ' has joined the channel.</p>');
+    var updateJoined = function (connections, userList) {
+        console.log(userList);
+        var id = socket.id;
+        console.log(id.toString());
+        console.log(userList[id]);
 
-        $userList.append('<p id="' + nickname + '">' + nickname + '</p>');
+
+        // console.log(nickname + ' has joined the channel.');
+        $status.append('<p>' + userList[socket.id] + ' has joined the channel.</p>');
+
+        // $userList.append('<p id="' + nickname + '">' + nickname + '</p>');
 
         $userCount.empty();
         if (connections === 1) {
@@ -55,13 +60,15 @@ $(document).ready(function() {                  // this is all client side
         else {
             $userCount.append('<p>' + connections + ' users currently online.</p>');
         }
+
+        updateUserList(userList);
     };
 
-    var updateDisconnected = function (connections, departed) {
-        console.log(departed + ' has left the room.');
-        $status.append('<p>' + departed + ' has left the room.</p>');
+    var updateDisconnected = function (connections, userList) {
+        // console.log(departed + ' has left the room.');
+        $status.append('<p>' + userList[socket.id] + ' has left the room.</p>');
 
-        // $userList.$('#' + departed).remove();
+        // $('#' + departed).remove();
 
         $userCount.empty();
         if (connections === 1) {
@@ -69,10 +76,21 @@ $(document).ready(function() {                  // this is all client side
         }
         else {
             $userCount.append('<p>' + connections + ' users currently online.</p>');
+        }
+
+        updateUserList(userList);
+    };
+
+    var updateUserList = function(userList) {
+        $userList.empty();
+        for(var userID in userList) {
+            console.log(userList[userID]);
+            $userList.append('<p id="' + userID + '">' + userList[userID] + '</p>');
         }
     };
 
     var showUserTyping = function(nickname) {
+        console.log(nickname + 'is typing');
         $notify.empty();
         $notify.append(nickname + ' is typing');
     };
@@ -80,8 +98,6 @@ $(document).ready(function() {                  // this is all client side
     var stopTyping = function(nickname) {
         $notify.empty();
     };
-
-    // socket.on('user connected', updateJoined);
 
     socket.on('user joined', updateJoined);
     socket.on('user disconnected', updateDisconnected);
