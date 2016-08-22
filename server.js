@@ -14,11 +14,6 @@ var userList = {};
 
 io.on('connection', function (socket) {
 
-    // var clients = io.sockets.sockets;
-    // for(var client in clients) {
-    //     console.log(client);
-    // }
-
     socket.on('store nickname', function(nickname) {
         connections++;
         userList[socket.id] = nickname;
@@ -44,7 +39,6 @@ io.on('connection', function (socket) {
         var nickname = userList[socket.id];
         socket.broadcast.emit('typing', nickname);
     });
-
 
     socket.on('stop typing', function() {
         var nickname = userList[socket.id];
